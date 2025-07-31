@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import UserProfile from './components/UserProfile';
 import UserContext from './UserContext';
 import ProfilePage from './components/ProfilePage';
+import UserProfile from './components/UserProfile';
 
 
 function App() {
@@ -38,6 +39,10 @@ function App() {
 
       <UserContext.Provider value={userData}>
         <ProfilePage />
+      </UserContext.Provider>
+
+      <UserContext.Provider value={userData}>
+        <UserProfile />
       </UserContext.Provider>
 
       <h1>Vite + React</h1>
