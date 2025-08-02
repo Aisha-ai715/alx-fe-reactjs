@@ -4,10 +4,30 @@ export const useRecipeStore = create((set, get) => ({
   recipes: [],
   filteredRecipes: [],
   searchTerm: '',
+  favorites: [],
+  recommendations: [],
+
+  addFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: [...state.favorites, recipeId],
+    })),
+
+  removeFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: state.favorites.filter((id) => id !== recipeId),
+    })),
+
+  generateRecommendations: () => {
+    const { favorites, recipes } = get();
+    const recommended = recipes.filter(
+      (r) => favorites.includes(r.id) && Math.random() > 0.5
+    );
+    set({ recommendations: recommended });
+  },
 
   setSearchTerm: (term) => {
     set({ searchTerm: term });
-    get().filterRecipes(); // 🔁 Trigger filter whenever search term changes
+    get().filterRecipes();
   },
 
   filterRecipes: () =>
