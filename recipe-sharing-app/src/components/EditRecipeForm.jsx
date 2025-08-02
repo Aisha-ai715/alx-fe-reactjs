@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRecipeStore } from '../store/recipeStore';
+import { useRecipeStore } from './recipeStore'; // adjust if your store path is different
 
 const EditRecipeForm = ({ recipe, onFinish }) => {
   const updateRecipe = useRecipeStore((state) => state.updateRecipe);
@@ -7,11 +7,11 @@ const EditRecipeForm = ({ recipe, onFinish }) => {
   const [title, setTitle] = useState(recipe.title);
   const [description, setDescription] = useState(recipe.description);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault(); // ✅ Required to prevent page reload
 
     updateRecipe({ ...recipe, title, description });
-    onFinish(); // to exit editing mode
+    onFinish(); // Signal to parent to exit editing mode
   };
 
   return (
@@ -30,7 +30,7 @@ const EditRecipeForm = ({ recipe, onFinish }) => {
         required
       />
       <br />
-      <button type="submit">Save Changes</button>
+      <button type="submit">Save</button>
       <button type="button" onClick={onFinish}>
         Cancel
       </button>
