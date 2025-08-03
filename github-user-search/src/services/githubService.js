@@ -7,15 +7,21 @@ const githubApi = axios.create({
   },
 });
 
-export const searchUsers = async (query) => {
-  const response = await githubApi.get(`/search/users?q=${query}`);
-  return response.data.items;
-};
+export const fetchAdvancedUserSearch = async (username, location, minRepos) => {
+  let queryParts = [];
 
-export const getUserDetails = async (username) => {
-  const response = await githubApi.get(`/users/${username}`);
+  if (username) queryParts.push(`${username} in:login`);
+  if (location) queryParts.push(`location:${location}`);
+  if (minRepos) queryParts.push(`repos:>=${minRepos}`);
+
+  const query = queryParts.join(' ').trim();
+
+  if (!query) {
+    throw new Error('No search criteria provided.');
+  }
+
+  const response = await githubApi.get(`/search/users?q=${encodeURIComponent(query)}`);
   return response.data;
 };
 
-export const fetchUserData = searchUsers;
-
+export const searchGitHubUsers = fetchAdvancedUserSearch;
