@@ -8,7 +8,7 @@ const githubApi = axios.create({
 });
 
 export const fetchAdvancedUserSearch = async (username, location, minRepos) => {
-  const queryParts = [];
+  let queryParts = [];
 
   if (username) queryParts.push(`${username} in:login`);
   if (location) queryParts.push(`location:${location}`);
@@ -21,5 +21,7 @@ export const fetchAdvancedUserSearch = async (username, location, minRepos) => {
   }
 
   const response = await githubApi.get(`/search/users?q=${encodeURIComponent(query)}`);
+
   return response.data;
 };
+
