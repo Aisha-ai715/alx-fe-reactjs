@@ -1,51 +1,46 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';
 
-function Search() {
+function Search({ onSearch }) {
   const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [location, setLocation] = useState('');
+  const [minRepos, setMinRepos] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(false);
-    setUser(null);
-
-    try {
-      const data = await fetchUserData(username);
-      setUser(data);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    onSearch({ username, location, minRepos });
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter GitHub username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
-
-      {loading && <p>Loading...</p>}
-
-      {error && <p>Looks like we cant find the user</p>}
-
-      {user && (
-        <div>
-          <img src={user.avatar_url} alt={user.login} />
-          <p>{user.login}</p>
-        </div>
-      )}
-    </div>
+    <form onSubmit={handleSubmit} className="p-6 bg-gray-100 rounded-lg max-w-xl mx-auto space-y-4">
+      <input
+        type="text"
+        placeholder="GitHub Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="w-full p-2 border rounded"
+      />
+      <input
+        type="text"
+        placeholder="Location"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        className="w-full p-2 border rounded"
+      />
+      <input
+        type="number"
+        placeholder="Minimum Repositories"
+        value={minRepos}
+        onChange={(e) => setMinRepos(e.target.value)}
+        className="w-full p-2 border rounded"
+        min={0}
+      />
+      <button
+        type="submit"
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+      >
+        Search
+      </button>
+    </form>
   );
 }
 
